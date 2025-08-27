@@ -1,28 +1,32 @@
 import React, { useState } from 'react';
 import { ImageUpload } from '@/components/ImageUpload';
 import { GridPreview } from '@/components/GridPreview';
-import { resizeImage, splitImageToGrid, downloadAllAsZip } from '@/utils/imageProcessor';
+import { LayoutSelector } from '@/components/LayoutSelector';
+import { resizeImage, splitImageToGrid, downloadAllAsZip, GridLayout, AspectRatio } from '@/utils/imageProcessor';
 import { useToast } from '@/hooks/use-toast';
 import { Scissors } from 'lucide-react';
 
 const Index = () => {
   const [gridImages, setGridImages] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [selectedLayout, setSelectedLayout] = useState<GridLayout>('3x3');
+  const [selectedRatio, setSelectedRatio] = useState<AspectRatio>('square');
   const { toast } = useToast();
 
   const handleImageUpload = async (file: File) => {
     setIsProcessing(true);
     try {
-      // Resize image using Pica
-      const resizedCanvas = await resizeImage(file);
+      // Resize image using Pica with selected layout and aspect ratio
+      const resizedCanvas = await resizeImage(file, selectedLayout, selectedRatio);
       
-      // Split into 3x3 grid
-      const pieces = splitImageToGrid(resizedCanvas);
+      // Split into grid based on selected layout and aspect ratio
+      const pieces = splitImageToGrid(resizedCanvas, selectedLayout, selectedRatio);
       setGridImages(pieces);
       
+      const pieceCount = selectedLayout === '3x1' ? 3 : selectedLayout === '3x2' ? 6 : 9;
       toast({
         title: "Success!",
-        description: "Your image has been processed and split into 9 pieces.",
+        description: `Your image has been processed and split into ${pieceCount} pieces.`,
       });
     } catch (error) {
       console.error('Error processing image:', error);
@@ -71,14 +75,34 @@ const Index = () => {
           </p>
         </div>
 
+        {/* Layout Selection */}
+        {gridImages.length === 0 && (
+          <LayoutSelector
+            selectedLayout={selectedLayout}
+            selectedRatio={selectedRatio}
+            onLayoutChange={setSelectedLayout}
+            onRatioChange={setSelectedRatio}
+          />
+        )}
+
         {/* Upload Section */}
         {gridImages.length === 0 && (
-          <ImageUpload onImageUpload={handleImageUpload} isProcessing={isProcessing} />
+          <ImageUpload 
+            onImageUpload={handleImageUpload} 
+            isProcessing={isProcessing}
+            layout={selectedLayout}
+            aspectRatio={selectedRatio}
+          />
         )}
 
         {/* Preview Section */}
         {gridImages.length > 0 && (
-          <GridPreview gridImages={gridImages} onDownloadAll={handleDownloadAll} />
+          <GridPreview 
+            gridImages={gridImages} 
+            layout={selectedLayout}
+            aspectRatio={selectedRatio}
+            onDownloadAll={handleDownloadAll} 
+          />
         )}
 
         {/* Reset Button */}

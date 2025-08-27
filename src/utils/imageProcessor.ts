@@ -3,7 +3,32 @@ import JSZip from 'jszip';
 
 const pica = new Pica();
 
-export const resizeImage = async (file: File): Promise<HTMLCanvasElement> => {
+export type GridLayout = '3x1' | '3x2' | '3x3';
+export type AspectRatio = 'square' | 'portrait';
+
+// Calculate dimensions based on layout and aspect ratio
+const getDimensions = (layout: GridLayout, aspectRatio: AspectRatio) => {
+  const pieceWidth = 1080;
+  const pieceHeight = aspectRatio === 'square' ? 1080 : 1350;
+  
+  const cols = 3;
+  const rows = layout === '3x1' ? 1 : layout === '3x2' ? 2 : 3;
+  
+  return {
+    width: cols * pieceWidth,
+    height: rows * pieceHeight,
+    pieceWidth,
+    pieceHeight,
+    cols,
+    rows
+  };
+};
+
+export const resizeImage = async (
+  file: File, 
+  layout: GridLayout = '3x3', 
+  aspectRatio: AspectRatio = 'square'
+): Promise<HTMLCanvasElement> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = async () => {
@@ -17,10 +42,13 @@ export const resizeImage = async (file: File): Promise<HTMLCanvasElement> => {
         originalCanvas.height = img.height;
         originalCtx.drawImage(img, 0, 0);
         
-        // Create canvas for resized image (3240x3240)
+        // Get target dimensions
+        const { width, height } = getDimensions(layout, aspectRatio);
+        
+        // Create canvas for resized image
         const resizedCanvas = document.createElement('canvas');
-        resizedCanvas.width = 3240;
-        resizedCanvas.height = 3240;
+        resizedCanvas.width = width;
+        resizedCanvas.height = height;
         
         // Use Pica for high-quality resizing
         await pica.resize(originalCanvas, resizedCanvas);
@@ -34,16 +62,20 @@ export const resizeImage = async (file: File): Promise<HTMLCanvasElement> => {
   });
 };
 
-export const splitImageToGrid = (canvas: HTMLCanvasElement): string[] => {
+export const splitImageToGrid = (
+  canvas: HTMLCanvasElement, 
+  layout: GridLayout = '3x3',
+  aspectRatio: AspectRatio = 'square'
+): string[] => {
   const gridImages: string[] = [];
-  const pieceSize = 1080; // Each piece is 1080x1080 (3240/3 = 1080)
+  const { pieceWidth, pieceHeight, cols, rows } = getDimensions(layout, aspectRatio);
   
-  for (let row = 0; row < 3; row++) {
-    for (let col = 0; col < 3; col++) {
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
       // Create canvas for each piece
       const pieceCanvas = document.createElement('canvas');
-      pieceCanvas.width = pieceSize;
-      pieceCanvas.height = pieceSize;
+      pieceCanvas.width = pieceWidth;
+      pieceCanvas.height = pieceHeight;
       
       const ctx = pieceCanvas.getContext('2d');
       if (!ctx) continue;
@@ -51,14 +83,14 @@ export const splitImageToGrid = (canvas: HTMLCanvasElement): string[] => {
       // Extract the piece from the main canvas
       ctx.drawImage(
         canvas,
-        col * pieceSize, // source x
-        row * pieceSize, // source y
-        pieceSize, // source width
-        pieceSize, // source height
+        col * pieceWidth, // source x
+        row * pieceHeight, // source y
+        pieceWidth, // source width
+        pieceHeight, // source height
         0, // destination x
         0, // destination y
-        pieceSize, // destination width
-        pieceSize  // destination height
+        pieceWidth, // destination width
+        pieceHeight  // destination height
       );
       
       // Convert to data URL

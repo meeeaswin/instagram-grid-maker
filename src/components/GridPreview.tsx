@@ -2,31 +2,52 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { GridLayout, AspectRatio } from '@/utils/imageProcessor';
 
 interface GridPreviewProps {
   gridImages: string[];
+  layout: GridLayout;
+  aspectRatio: AspectRatio;
   onDownloadAll: () => void;
 }
 
-export const GridPreview: React.FC<GridPreviewProps> = ({ gridImages, onDownloadAll }) => {
+export const GridPreview: React.FC<GridPreviewProps> = ({ 
+  gridImages, 
+  layout, 
+  aspectRatio,
+  onDownloadAll 
+}) => {
   if (gridImages.length === 0) return null;
+
+  const getGridClass = () => {
+    return layout === '3x1' ? 'grid-cols-3 grid-rows-1' : 
+           layout === '3x2' ? 'grid-cols-3 grid-rows-2' : 
+           'grid-cols-3 grid-rows-3';
+  };
+
+  const getAspectClass = () => {
+    return aspectRatio === 'square' ? 'aspect-square' : 'aspect-[4/5]';
+  };
+
+  const pieceCount = layout === '3x1' ? 3 : layout === '3x2' ? 6 : 9;
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-8">
       <div className="text-center space-y-4">
         <h2 className="text-3xl font-bold text-foreground">Your Instagram Grid</h2>
         <p className="text-muted-foreground">
-          Post these images in order (1-9) to create the perfect grid layout
+          Post these images in order (1-{pieceCount}) to create the perfect {layout} grid layout
         </p>
       </div>
       
-      <div className="grid grid-cols-3 gap-4 p-6 bg-card rounded-2xl shadow-xl">
+      <div className={cn("grid gap-4 p-6 bg-card rounded-2xl shadow-xl", getGridClass())}>
         {gridImages.map((imageUrl, index) => (
           <div
             key={index}
             className={cn(
-              "relative aspect-square rounded-xl overflow-hidden grid-item",
-              "bg-muted border-2 border-border hover:border-primary/50"
+              "relative rounded-xl overflow-hidden grid-item",
+              "bg-muted border-2 border-border hover:border-primary/50",
+              getAspectClass()
             )}
           >
             <img

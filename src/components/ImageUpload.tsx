@@ -2,12 +2,21 @@ import React, { useCallback, useState } from 'react';
 import { Upload, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
+import { GridLayout, AspectRatio } from '@/utils/imageProcessor';
+
 interface ImageUploadProps {
   onImageUpload: (file: File) => void;
   isProcessing: boolean;
+  layout: GridLayout;
+  aspectRatio: AspectRatio;
 }
 
-export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, isProcessing }) => {
+export const ImageUpload: React.FC<ImageUploadProps> = ({ 
+  onImageUpload, 
+  isProcessing, 
+  layout, 
+  aspectRatio 
+}) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
   const handleDrop = useCallback((e: React.DragEvent<HTMLDivElement>) => {
@@ -75,7 +84,7 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({ onImageUpload, isProce
               {isDragOver ? 'Drop your image here' : 'Upload an Image'}
             </h3>
             <p className="text-muted-foreground max-w-sm">
-              Drag & drop your image or click to browse. We'll resize it to 3240x3240 and split it into a 3x3 grid for Instagram.
+              Drag & drop your image or click to browse. We'll resize and split it into a {layout} {aspectRatio} grid for Instagram.
             </p>
           </div>
           
