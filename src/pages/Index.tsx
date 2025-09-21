@@ -58,20 +58,20 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen py-12 px-6">
-      <div className="max-w-6xl mx-auto space-y-16">
+    <div className="min-h-screen py-6 sm:py-12 px-4 sm:px-6">
+      <div className="max-w-6xl mx-auto space-y-8 sm:space-y-16">
         {/* Header */}
-        <div className="text-center space-y-6">
-          <div className="flex items-center justify-center space-x-3">
-            <div className="p-3 bg-primary/20 rounded-2xl">
-              <Scissors className="w-8 h-8 text-primary" />
+        <div className="text-center space-y-4 sm:space-y-6">
+          <div className="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-3">
+            <div className="p-2 sm:p-3 bg-primary/20 rounded-2xl">
+              <Scissors className="w-6 h-6 sm:w-8 sm:h-8 text-primary" />
             </div>
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent leading-tight">
               Instagram Grid Maker
             </h1>
           </div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Transform any image into a stunning 3x3 Instagram grid. Upload, resize, and download with professional quality.
+          <p className="text-base sm:text-xl text-muted-foreground max-w-2xl mx-auto px-2">
+            Transform any image into a stunning Instagram grid. Upload, resize, and download with professional quality.
           </p>
         </div>
 
@@ -107,10 +107,10 @@ const Index = () => {
 
         {/* Reset Button */}
         {gridImages.length > 0 && (
-          <div className="text-center">
+          <div className="text-center px-4">
             <button
               onClick={() => setGridImages([])}
-              className="text-muted-foreground hover:text-foreground transition-colors underline"
+              className="text-sm sm:text-base text-muted-foreground hover:text-foreground transition-colors underline touch-manipulation active:scale-95 py-2"
             >
               Start over with a new image
             </button>

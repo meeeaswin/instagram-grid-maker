@@ -50,8 +50,8 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
     <div className="w-full max-w-2xl mx-auto">
       <div
         className={cn(
-          "relative rounded-2xl border-2 border-dashed transition-all duration-300 p-12",
-          "hover:border-primary/50 hover:bg-card/50",
+          "relative rounded-2xl border-2 border-dashed transition-all duration-300 p-6 sm:p-8 lg:p-12 touch-manipulation",
+          "hover:border-primary/50 hover:bg-card/50 active:scale-[0.98]",
           isDragOver ? "border-primary bg-primary/5 scale-105" : "border-border",
           isProcessing && "opacity-50 pointer-events-none"
         )}
@@ -67,28 +67,28 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
           disabled={isProcessing}
         />
         
-        <div className="flex flex-col items-center justify-center text-center space-y-6">
+        <div className="flex flex-col items-center justify-center text-center space-y-4 sm:space-y-6">
           <div className={cn(
-            "p-6 rounded-full transition-all duration-300",
+            "p-4 sm:p-6 rounded-full transition-all duration-300",
             isDragOver ? "bg-primary/20 scale-110" : "bg-muted/50"
           )}>
             {isDragOver ? (
-              <ImageIcon className="w-12 h-12 text-primary" />
+              <ImageIcon className="w-8 h-8 sm:w-12 sm:h-12 text-primary" />
             ) : (
-              <Upload className="w-12 h-12 text-muted-foreground" />
+              <Upload className="w-8 h-8 sm:w-12 sm:h-12 text-muted-foreground" />
             )}
           </div>
           
           <div className="space-y-2">
-            <h3 className="text-2xl font-semibold text-foreground">
+            <h3 className="text-lg sm:text-xl lg:text-2xl font-semibold text-foreground">
               {isDragOver ? 'Drop your image here' : 'Upload an Image'}
             </h3>
-            <p className="text-muted-foreground max-w-sm">
-              Drag & drop your image or click to browse. We'll resize and split it into a {layout} {aspectRatio} grid for Instagram.
+            <p className="text-sm sm:text-base text-muted-foreground max-w-sm px-2">
+              Drag & drop your image or tap to browse. We'll resize and split it into a {layout} {aspectRatio} grid for Instagram.
             </p>
           </div>
           
-          <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+          <div className="flex items-center space-x-2 text-xs sm:text-sm text-muted-foreground">
             <span>Supports:</span>
             <span className="font-medium">JPG, PNG, WEBP</span>
           </div>
@@ -96,9 +96,9 @@ export const ImageUpload: React.FC<ImageUploadProps> = ({
         
         {isProcessing && (
           <div className="absolute inset-0 bg-background/80 backdrop-blur-sm rounded-2xl flex items-center justify-center">
-            <div className="flex items-center space-x-3">
+            <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-3">
               <div className="animate-spin w-6 h-6 border-2 border-primary border-t-transparent rounded-full"></div>
-              <span className="text-foreground font-medium">Processing your image...</span>
+              <span className="text-sm sm:text-base text-foreground font-medium text-center">Processing your image...</span>
             </div>
           </div>
         )}

@@ -30,42 +30,42 @@ export const LayoutSelector: React.FC<LayoutSelectorProps> = ({
   ];
 
   return (
-    <div className="w-full max-w-2xl mx-auto space-y-6">
+    <div className="w-full max-w-2xl mx-auto space-y-6 px-4 sm:px-0">
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">Grid Layout</h3>
-        <div className="grid grid-cols-3 gap-3">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground">Grid Layout</h3>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
           {layouts.map((layout) => (
             <Button
               key={layout.value}
               variant={selectedLayout === layout.value ? "default" : "outline"}
               className={cn(
-                "flex flex-col items-center p-4 h-auto space-y-2",
+                "flex flex-col items-center p-3 sm:p-4 h-auto space-y-1 sm:space-y-2 touch-manipulation active:scale-95",
                 selectedLayout === layout.value && "ring-2 ring-primary/20"
               )}
               onClick={() => onLayoutChange(layout.value)}
             >
-              <span className="text-lg font-bold">{layout.label}</span>
-              <span className="text-xs text-muted-foreground">{layout.description}</span>
+              <span className="text-base sm:text-lg font-bold">{layout.label}</span>
+              <span className="text-xs text-muted-foreground text-center leading-tight">{layout.description}</span>
             </Button>
           ))}
         </div>
       </div>
 
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-foreground">Aspect Ratio</h3>
-        <div className="grid grid-cols-2 gap-3">
+        <h3 className="text-base sm:text-lg font-semibold text-foreground">Aspect Ratio</h3>
+        <div className="grid grid-cols-2 gap-2 sm:gap-3">
           {ratios.map((ratio) => (
             <Button
               key={ratio.value}
               variant={selectedRatio === ratio.value ? "default" : "outline"}
               className={cn(
-                "flex flex-col items-center p-4 h-auto space-y-2",
+                "flex flex-col items-center p-3 sm:p-4 h-auto space-y-1 sm:space-y-2 touch-manipulation active:scale-95",
                 selectedRatio === ratio.value && "ring-2 ring-primary/20"
               )}
               onClick={() => onRatioChange(ratio.value)}
             >
-              <span className="font-semibold">{ratio.label}</span>
-              <span className="text-xs text-muted-foreground">{ratio.description}</span>
+              <span className="text-sm sm:text-base font-semibold">{ratio.label}</span>
+              <span className="text-xs text-muted-foreground text-center leading-tight">{ratio.description}</span>
             </Button>
           ))}
         </div>
